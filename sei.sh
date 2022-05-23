@@ -68,7 +68,7 @@ sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0usei\"/" $HOME/.se
 
 # set peers and seeds
 SEEDS=""
-PEERS=""
+PEERS="5082637d2face9dd32c4ad7eff34d38df4244c9a@65.21.123.69:26642"
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.sei-chain/config/config.toml
 
 # enable prometheus
