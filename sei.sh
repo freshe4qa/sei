@@ -34,21 +34,22 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install curl tar wget clang pkg-config libssl-dev jq build-essential bsdmainutils git make ncdu gcc git jq chrony liblz4-tool -y
 
 # install go
-if go version > /dev/null 2>&1
+source $HOME/.bash_profile
+    if go version > /dev/null 2>&1
     then
         echo -e '\n\e[40m\e[92mSkipped Go installation\e[0m'
     else
         echo -e '\n\e[40m\e[92mStarting Go installation...\e[0m'
-ver="1.17.2"
-cd $HOME
-wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
-rm "go$ver.linux-amd64.tar.gz"
-echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
-source ~/.bash_profile
-go version
-fi
+        cd $HOME && ver="1.17.2"
+        wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
+        sudo rm -rf /usr/local/go
+        sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
+        sudo rm "go$ver.linux-amd64.tar.gz"
+        echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> $HOME/.bash_profile
+        echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> $HOME/.bash_profilesource
+        source $HOME/.bash_profile
+        go version
+    fi
 
 # download binary
 cd $HOME
