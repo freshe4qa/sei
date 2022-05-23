@@ -1,4 +1,10 @@
 #!/bin/bash
+
+while true
+do
+
+# Logo
+
 echo -e '\e[40m\e[91m'
 echo -e '  ____                  _                    '
 echo -e ' / ___|_ __ _   _ _ __ | |_ ___  _ __        '
@@ -15,6 +21,25 @@ echo -e '                                       |___/ '
 echo -e '\e[0m'
 
 sleep 2
+
+# Menu
+
+PS3='Select an action: '
+options=(
+"Install"
+"Create Wallet"
+"Faucet"
+"Create Validator"
+"Exit")
+select opt in "${options[@]}"
+do
+case $opt in
+
+"Install")
+echo "============================================================"
+echo "Install start"
+echo "============================================================"
+
 
 # set vars
 if [ ! $NODENAME ]; then
@@ -118,3 +143,48 @@ sudo mv $HOME/seid.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable seid
 sudo systemctl restart seid
+
+break
+;;
+
+"Create Wallet")
+seid keys add $WALLET
+echo "============================================================"
+echo "Save address and mnemonic"
+echo "============================================================"
+WALLET_ADDRESS=$(seid keys show $WALLET -a)
+echo 'export WALLET_ADDRESS='${WALLET_ADDRESS} >> $HOME/.bash_profile
+echo 'export VALOPER_ADDRESS='${VALOPER_ADDRESS} >> $HOME/.bash_profile
+source $HOME/.bash_profile
+
+break
+;;
+
+"Faucet")
+curl -X POST -d '{"address": "'"$WALLET_ADDRESS"'", "coins": ["1000000usei"]}' http://3.22.112.181:8000
+
+break
+;;
+
+"Create Validator")
+seid tx staking create-validator \
+  --amount 1000000usei \
+  --from $WALLET \
+  --commission-max-change-rate "0.01" \
+  --commission-max-rate "0.2" \
+  --commission-rate "0.07" \
+  --min-self-delegation "1" \
+  --pubkey  $(seid tendermint show-validator) \
+  --moniker $NODENAME \
+  --chain-id $CHAIN_ID
+  
+break
+;;
+
+"Exit")
+exit
+;;
+*) echo "invalid option $REPLY";;
+esac
+done
+done
