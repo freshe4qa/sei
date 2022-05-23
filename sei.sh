@@ -86,7 +86,7 @@ sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei-chain/config/app.toml
 
 # reset
-seid tendermint unsafe-reset-all
+seid unsafe-reset-all
 
 # create service
 tee $HOME/seid.service > /dev/null <<EOF
